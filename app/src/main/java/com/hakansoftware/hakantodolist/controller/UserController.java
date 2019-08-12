@@ -9,6 +9,7 @@ import com.hakansoftware.hakantodolist.base.BaseIntent;
 import com.hakansoftware.hakantodolist.base.BaseUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import io.swagger.client.ApiClient;
 import io.swagger.client.api.UserApi;
@@ -52,10 +53,11 @@ public class UserController {
 
                     BaseUtils.showToast(context, response.body().toString());
 
-                    MainActivity.email = email;
-                    MainActivity.password = password;
+                    HashMap<String, String> userInfo = new HashMap<String, String>();
+                    userInfo.put("email",email);
+                    userInfo.put("password",password);
 
-                    BaseIntent.baseIntent(context, MainActivity.class);
+                    BaseIntent.baseIntent(context, MainActivity.class, userInfo);
                 }
                 else
                 {

@@ -1,5 +1,6 @@
 package com.hakansoftware.hakantodolist.controller;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.hakansoftware.hakantodolist.activities.MainActivity;
@@ -8,10 +9,12 @@ import com.hakansoftware.hakantodolist.base.BaseIntent;
 import com.hakansoftware.hakantodolist.base.BaseUtils;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import io.swagger.client.ApiClient;
 import io.swagger.client.api.UserApi;
@@ -21,22 +24,40 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class UserControllerTest {
 
+    private UserController userController;
+    private Context context;
     private UserApi api;
 
     @Before
     public void setUp() throws Exception {
+        userController = UserController.getInstance();
+        context = mock(Context.class);
         api = new ApiClient().createService(UserApi.class);
     }
 
     @Test
-    public void userGetTest() {
-        String email = "qwe";
-        String password = "qwe";
+    public void register() {
+        userController.register(context, "qwe","qwe");
 
-        Call<Object> call = api.userGet(email, password);
+        User user = new User();
+        user.setEmail("qwe");
+        user.setPassword("qwe");
+
+        Call<Object> call = api.userPost(user);
+
+        try {
+            Response<Object> response = call.execute();
+            Object body = response.body();
+
+            assertTrue(response.isSuccessful() && body.toString().contains("success"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         call.enqueue(new Callback<Object>() {
             @Override
@@ -62,11 +83,20 @@ public class UserControllerTest {
     }
 
     @Test
-    public void userPostTest() {
-        User user = new User();
-        user.setEmail("qwe");
-        user.setPassword("qwe");
-        Call<Object> call = api.userPost(user);
+    public void login() {
+        userController.login(context, "qwe", "qwe");
+
+        Call<Object> call = api.userGet("qwe", "qwe");
+
+        try {
+            Response<Object> response = call.execute();
+            Object body = response.body();
+
+            assertTrue(response.isSuccessful() && body.toString().contains("success"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         call.enqueue(new Callback<Object>() {
             @Override

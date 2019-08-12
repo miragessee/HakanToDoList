@@ -2,6 +2,7 @@ package com.hakansoftware.hakantodolist.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,6 +10,8 @@ import android.widget.EditText;
 import com.hakansoftware.hakantodolist.R;
 import com.hakansoftware.hakantodolist.base.BaseIntent;
 import com.hakansoftware.hakantodolist.controller.UserController;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,12 +66,13 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        //Toast.makeText(AnaActivity.this, "1", Toast.LENGTH_LONG).show();
-        if (MainActivity.email != null && MainActivity.password != null) {
-            if (MainActivity.email.length() > 2) {
-                edtEMail.setText(MainActivity.email);
-                edtPassword.setText(MainActivity.password);
-            }
+        Intent intent = getIntent();
+        HashMap<String, String> data = (HashMap<String, String>)intent.getSerializableExtra("data");
+
+        if(data != null)
+        {
+            edtEMail.setText(data.get("email"));
+            edtPassword.setText(data.get("password"));
         }
     }
 }

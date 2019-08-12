@@ -70,4 +70,6 @@ dependencies {
     }
     implementation "io.gsonfire:gson-fire:$json_fire_version"
     implementation "org.threeten:threetenbp:$threetenbp_version"
+    testImplementation "org.mockito:mockito-core:+"
+    androidTestImplementation "org.mockito:mockito-android:+"
 }
